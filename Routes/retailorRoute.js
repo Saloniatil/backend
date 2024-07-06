@@ -166,12 +166,13 @@ let upload = multer({ storage: storage });
 
  
 
-const {getData, postData, getDatasrno, deletesrno, putData,  deleteData, getUserdata} = require("../Controller/retailor.js");
+const {getData, postData, getDatasrno, deletesrno, putData,  deleteData, activedata, getUserdata} = require("../Controller/retailor.js");
 retailorRoute.get('/get/api/retailor', getData);
 retailorRoute.post('/api/post/retailor', upload.single('Image'), postData);
 retailorRoute.get('/api/getretailor/:regno', getDatasrno);
 retailorRoute.put('/api/put/retailore/:id', putData)
 // retailorRoute.delete('/delete', deletesrno);
+retailorRoute.put('/api/status/:Status/:id', activedata)
 retailorRoute.delete('/api/delete/retailore/:id', deleteData);
  
 module.exports = retailorRoute;   

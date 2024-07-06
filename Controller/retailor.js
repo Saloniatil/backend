@@ -104,6 +104,22 @@ const deleteData = (req, res) => {
   }
 };
 
- 
+///////////////status ////////////
+const activedata = (req, res) => {
+  const id = req.params.id;
+  const status = req.params.Status;
+  console.log(id)
+  console.log(status)
+  const sql = `UPDATE retailor set Status = ? Where id = ?`
+  connection.query(sql, [status, id], (err, result) => {
+    if (err) {
+      console.log("Error:", err.sqlMessage);
+      res.status(500).json({error: err.sqlMessage})
+      // res.send(err);
+    } else {
+      res.send(result)
+    }
+  })
+}
 // module.exports = { getData, postData, putData, create };
-module.exports = { getData, postData, getDatasrno, putData, deleteData  };
+module.exports = { getData, postData, getDatasrno, putData, deleteData, activedata };
