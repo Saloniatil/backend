@@ -43,7 +43,6 @@ const {getdata, postData, postloginData, getUserdata } = require("../Controller/
 registerRoute.get('/get/register/retailor', getdata);
 registerRoute.post('/api/post/register', postData);
 registerRoute.post('/api/post/login', postloginData);
-// registerRoute.post('/api/post/retailor/login', retailer_login);
 registerRoute.get('/api/retailer/verify/getUserdata', verifyUser, getUserdata);
  
 

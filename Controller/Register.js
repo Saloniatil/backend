@@ -26,33 +26,71 @@ const getdata = async (req, res) => {
 };
 
 ////////////=================register ===================///////////////
+// const postData = async (req, res) => {
+//   try {
+//     const sqlQuery = "INSERT INTO registerdata  SET ?";
+//     bcrypt.hash(req.body.password.toString(), 10, async (err, hash) => {
+//       if (err) {
+//         console.log("Error in hashing password:", err);
+//         return res.status(500).json({ Status: false, Error: "Query Error" });
+//       }
+//       let data = {
+//         username: req.body.username,
+//         email: req.body.email,
+//         password: hash,
+//       };
+//       console.log(data);
+//       await connection.query(sqlQuery, data, function(err, result) {
+//         if (err) {
+//           console.log("Error", err);
+//           res.status(500).send({ error: "error in server" });
+//         } else {
+//           console.log(result);
+//           res.send(result);
+//         }
+//       });
+//     });
+//   } catch (error) {
+//     console.log("error", error); // use error instead of err
+//     res.status(500).send({ error: "server Error" });
+//   }  
+// };
+
 const postData = async (req, res) => {
   try {
-    const sqlQuery = "INSERT INTO registerdata  SET ?";
-    bcrypt.hash(req.body.password.toString(), 10, async (err, hash) => {
-      if (err) {
-        console.log("Error in hashing password:", err);
-        return res.status(500).json({ Status: false, Error: "Query Error" });
-      }
-      let data = {
-        username: req.body.username,
-        email: req.body.email,
-        password: hash,
-      };
-      console.log(data);
-      await connection.query(sqlQuery, data, function(err, result) {
-        if (err) {
-          console.log("Error", err);
-          res.status(500).send({ error: "error in server" });
-        } else {
-          console.log(result);
-          res.send(result);
+    const { username, email, password } = req.body;
+
+    const sqlQuery = `  INSERT INTO registerdata SET username = ?, email = ?, password = ? `;
+    
+    // Assuming you have a function sendMail defined somewhere
+    const sendMail = (email, subject, message) => {
+      // Implement your email sending logic here
+      console.log(`Sending email to ${email} with subject: ${subject}`);
+      // Example using a dummy implementation
+      console.log(`Email message: ${message}`);
+    };
+
+    connection.query(sqlQuery, [username, email, password], async (error, result) => {
+      if (error) {
+        console.error("Error in executing SQL query:", error);
+        res.status(500).json({ error: error.sqlMessage });
+      } else {
+        console.log(" Reatailor registered successfully:", result);
+
+        // Send confirmation email
+        try {
+          const confirmationMessage = `Dear ${name}, your appointment has been booked successfully for ${appointment_date}.`;
+          await sendMail(email, ' Reatailor  Confirmation', confirmationMessage);
+          res.json({ message: ' Reatailor registered successfully and confirmation email sent', result });
+        } catch (mailError) {
+          console.error('Error sending email:', mailError);
+          res.status(500).json({ message: 'Retailor but failed to send confirmation email', result });
         }
-      });
+      }
     });
   } catch (error) {
-    console.log("error", error); // use error instead of err
-    res.status(500).send({ error: "server Error" });
+    console.error("Error in Reatailor registered  function:", error);
+    res.status(500).json({ error: 'Server Error' });
   }
 };
 
